@@ -18,11 +18,11 @@ class Board
 
     def initialize
         @board = [
-            ["1", "-", "2", "-", "3"],
+            ["1", "|", "2", "|", "3"],
             ["-", "-", "-", "-", "-"],
-            ["4", "-", "5", "-", "6"],
+            ["4", "|", "5", "|", "6"],
             ["-", "-", "-", "-", "-"],
-            ["7", "-", "8", "-", "9"]
+            ["7", "|", "8", "|", "9"]
         ]
     end
 end
@@ -36,14 +36,49 @@ class Game
 
     def startGame
         marks = ["X","O"]
-        marks.each do |mark|
-            print "Enter player #{mark}'s name: "
-            name = gets
-            @players.push(Player.new(name,marks[x]))
+        marks.each_with_index do |mark,idx|
+            name = mark
+            '''
+            print "Enter player #{mark} name: "
+            name = gets'''
+            @players.push(Player.new(name,marks[idx]))
         end
+        printBoard()
+        playGame()
+    end
+    
+    def playGame
+        winningCondition()
+    end
+
+    def winningCondition
+        empty_space = false
+        for row in @board.board
+            row.any? do |val|
+                begin
+                    val.parseInt()
+                    empty_space = true
+                    break
+                rescue => exception
+                    endGame
+                end
+            end
+            if empty_space
+                break
+            end
+        end
+    end
+
+    def endGame
         
-        while @board.all? { |i| i.is_a?(String) } == false
-            p @board
+    end
+
+    def printBoard
+        for row in @board.board
+            for val in row
+                print val
+            end
+            puts
         end
     end
 end
